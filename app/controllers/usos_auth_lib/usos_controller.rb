@@ -10,14 +10,18 @@ module UsosAuthLib
       verifier = params[:oauth_verifier]
       access_token = usos_authorizer.access_token(session, verifier, nil, nil)
 
-      response = access_token.get('/services/users/user?fields=id|first_name|last_name|email')
+      response = access_token.get('/services/users/user?fields=id|first_name|last_name|email|photo_urls')
       parsed_response = JSON.parse(response.body)
+
+      puts parsed_response
 
       redirect_path = UsosAuthLib.configuration.redirect_path
 
       url = url_for(redirect_path)
+
       url << "?id=#{parsed_response['id']}&email=#{parsed_response['email']}"
       url << "&first_name=#{parsed_response['first_name']}&last_name=#{parsed_response['last_name']}"
+      url << "&photo_url=#{parsed_response['photo_urls']['50x50']}"
       url << "&token=#{access_token.token}&secret=#{access_token.secret}"
 
       redirect_to url, allow_other_host: true
