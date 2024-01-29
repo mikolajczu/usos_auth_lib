@@ -1,5 +1,5 @@
-require "usos_auth_lib/version"
-require "usos_auth_lib/engine"
+require 'usos_auth_lib/version'
+require 'usos_auth_lib/engine'
 require 'oauth'
 
 module UsosAuthLib
