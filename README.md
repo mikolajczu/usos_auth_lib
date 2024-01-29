@@ -31,7 +31,7 @@ get '/authorize_user', to: 'usos_auth_lib/usos#authorize_user'
 get '/callback', to: 'usos_auth_lib/usos#callback'
 ```
 
-`get '/authorize_user'` -> replace it with your route or leave it, this is the route used to authorize the user via the USOS API
+`get '/authorize_user'` -> replace it with your route or leave it, this is the route used to authorize the user via the USOS API <br>
 `get '/callback'` -> replace it with your route or leave it, this is the route used to return from USOS, <span style="color: red;">THIS IS NOT THE ROUTE RETURN FROM THE LIBRARY!</span>, this route is the one we added to the configuration
 
 Here's an example for creating a user or obtain it from our database in `models/users.rb`:
