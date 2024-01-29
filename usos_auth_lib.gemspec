@@ -6,13 +6,17 @@ Gem::Specification.new do |spec|
   spec.authors     = ['mikolajczu']
   spec.email       = ['mikeyczu@gmail.com']
   spec.homepage    = 'https://github.com/mikolajczu/usos_auth_lib'
-  spec.summary     = 'Summary of UsosAuthLib.'
-  spec.description = 'Description of UsosAuthLib.'
-  spec.license     = 'MIT'
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+  spec.summary     = '
+    UsosAuthLib: Simplify user authentication in Ruby applications with
+    this powerful gem tailored for seamless integration with the USOS API.
+    Streamline your workflow and elevate your projects effortlessly.
+  '
+  spec.description = '
+    Enhance your Ruby applications with UsosAuthLib, a robust gem for streamlined user authentication
+    via the USOS API. Simplify your workflow, contribute to the community,
+    and power up your Ruby projects effortlessly with UsosAuthLib.
+  '
+  spec.license = 'MIT'
 
   spec.metadata['homepage_uri'] = spec.homepage
 
