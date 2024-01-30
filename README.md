@@ -45,7 +45,6 @@ class User < ApplicationRecord
       first_name: token[:first_name],
       last_name: token[:last_name],
       usos_id: token[:id],
-      img_url: token[:photo_url] || nil
     ) unless user
 
     user
