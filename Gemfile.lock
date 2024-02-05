@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    usos_auth_lib (0.1.0)
+    usos_auth_lib (0.1.1)
       oauth
       rails (>= 7.1.2)
 
