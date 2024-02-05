@@ -4,6 +4,8 @@ module UsosAuthLib
       authorization_url = usos_authorizer.authorize(session, request)
 
       redirect_to authorization_url, allow_other_host: true
+    rescue StandardError => e
+      Rails.logger.error "USOS Authorize User Error: #{e.message}"
     end
 
     def callback
@@ -13,23 +15,19 @@ module UsosAuthLib
       response = access_token.get('/services/users/user?fields=id|first_name|last_name|email')
       parsed_response = JSON.parse(response.body)
 
-      puts parsed_response
+      session[:user_data] = parsed_response
+      session[:access_token] = access_token.token
+      session[:access_token_secret] = access_token.secret
 
-      redirect_path = UsosAuthLib.configuration.redirect_path
-
-      url = url_for(redirect_path)
-
-      url << "?id=#{parsed_response['id']}&email=#{parsed_response['email']}"
-      url << "&first_name=#{parsed_response['first_name']}&last_name=#{parsed_response['last_name']}"
-      url << "&token=#{access_token.token}&secret=#{access_token.secret}"
-
-      redirect_to url, allow_other_host: true
+      redirect_to UsosAuthLib.configuration.redirect_path, allow_other_host: true
+    rescue StandardError => e
+      Rails.logger.error "USOS Callback Error: #{e.message}"
     end
 
     private
 
     def usos_authorizer
-      UsosAuthLib::UsosAuthorizer.new
+      UsosAuthLib::UsosAuthorizer.instance
     end
   end
 end

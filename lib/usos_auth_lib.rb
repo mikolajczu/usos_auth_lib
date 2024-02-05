@@ -1,6 +1,7 @@
 require 'usos_auth_lib/version'
 require 'usos_auth_lib/engine'
 require 'oauth'
+require 'singleton'
 
 module UsosAuthLib
   class Configuration
@@ -25,6 +26,8 @@ module UsosAuthLib
   end
 
   class UsosAuthorizer
+    include Singleton
+
     def initialize
       config = UsosAuthLib.configuration
       @api_key = config.api_key
@@ -43,6 +46,8 @@ module UsosAuthLib
       session[:request_token_secret] = request_token.secret
 
       request_token.authorize_url
+    rescue StandardError => e
+      Rails.logger.error "USOS Authorize Error: #{e.message}"
     end
 
     def access_token(session, verifier, access_token, access_token_secret)
@@ -64,6 +69,9 @@ module UsosAuthLib
       end
 
       token
+    rescue StandardError => e
+      Rails.logger.error "USOS Access Token Error: #{e.message}"
+      nil
     end
 
     private
@@ -77,6 +85,8 @@ module UsosAuthLib
         authorize_path: '/services/oauth/authorize',
         access_token_path: '/services/oauth/access_token'
       )
+    rescue StandardError => e
+      Rails.logger.error "USOS Consumer Error: #{e.message}"
     end
   end
 end
