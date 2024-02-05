@@ -6,6 +6,25 @@ The USOS API, a cornerstone of academic data access, opens up a world of possibi
 
 The OAuth 1.0a workflow ensures a robust and secure authentication process, safeguarding user credentials while granting seamless access to the USOS API. By adhering to the guidelines provided in the official source, developers can confidently build applications that tap into the extensive educational resources offered by USOS, enriching their projects with academic data in a reliable and user-friendly manner. Explore the possibilities of educational integration through the USOS API and OAuth 1.0a, empowering your applications with a wealth of valuable information.
 
+
+## Installation
+Add this line to your application's Gemfile:
+
+```ruby
+gem "usos_auth_lib"
+```
+
+And then execute:
+```bash
+$ bundle
+```
+
+Or install it yourself as:
+```bash
+$ gem install usos_auth_lib
+```
+
+
 ## Usage
 Here's an example for adding the configuration to a Rails app in `config/initializers/usos_auth_lib.rb`:
 ```ruby
@@ -54,33 +73,24 @@ end
 
 Here's an example for callback method in `controllers/users_controller.rb`:
 ```ruby
-class UsersController < ApplicationController
-  def usos_auth
-    session[:access_token] = params[:token]
-    session[:access_token_secret] = params[:secret]
-    @user = User.from_usos(params)
+  def callback
+    user = User.from_usos(session.delete(:user_data))
+    session[:current_user_id] = user.id
   end
-end
 ```
 
-Here's an example for use of handle_request method in `controllers/users_controller.rb`:
+Here's an example for use of handle_request and get_terms_grades method in `controllers/users_controller.rb`:
 ```ruby
 class UsersController < ApplicationController
   include UsosAuthCommon
-  def usos_auth
-    session[:access_token] = params[:token]
-    session[:access_token_secret] = params[:secret]
-    @user = User.from_usos(params)
-  end
-
   def grades
-    response = handle_request(session[:access_token], session[:access_token_secret], '/services/grades/terms2?term_ids=2023/24Z')
+    response = handle_request(session[:access_token], session[:access_token_secret], '/services/grades/terms2?term_ids=2023/24Z|2022/23L')
 
-    render json: response
+    response_2 = get_terms_grades(session[:access_token], session[:access_token_secret], '2023/24Z|2022/23L')
   end
 end
 ```
-In this example, we want to retrieve all grades from the 2023/2024Z semester.
+In this example, we want to retrieve all grades from the 2023/2024Z and 2022/2023L semester.
 
 ## Scopes
 When you request a Request Token, you may pass the scopes parameter, which describes the things you want the User to share with you. Many API methods require you to have the access to multiple scopes.
@@ -119,23 +129,6 @@ student_exams_write: Allows to register and unregister the student from his exam
 - theses_protocols_write: Allows access to editing diploma exam protocols, e.g. signing protocols.
 
 Source: `https://apps.usos.edu.pl/developers/api/authorization/`
-
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem "usos_auth_lib"
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install usos_auth_lib
-```
 
 ## Contributing
 Contribution directions go here.
