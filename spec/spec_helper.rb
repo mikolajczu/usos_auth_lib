@@ -11,7 +11,10 @@
 # a separate helper file that requires the additional dependencies and performs
 # the additional setup, and require it from the spec files that actually need
 # it.
-#
+
+require_relative '../spec/dummy/config/environment' # <============= 6
+ENV['RAILS_ROOT'] ||= "#{File.dirname(__FILE__)}../../../spec/dummy" # <============= 7
+
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
